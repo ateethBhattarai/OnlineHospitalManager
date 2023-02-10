@@ -30,7 +30,7 @@ class UserController extends Controller
 
         $data = new User;
         $data->full_name = $request->full_name;
-        $data->profile_photo = $request->file('photo')->store('profile_photos');
+        $data->profile_photo = $request->profile_photos;
         $data->phone_number = $request->phone_number;
         $data->role = $request->role;
         $data->email = $request->email;

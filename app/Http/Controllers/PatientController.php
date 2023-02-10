@@ -6,6 +6,7 @@ use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
@@ -17,6 +18,7 @@ class PatientController extends Controller
     //stores data into the database
     public function store(Request $request)
     {
+        // return $request->profile_photo;
         //validation for storing patient's data
         $request->validate([
             'blood_group' => 'required',
@@ -27,12 +29,19 @@ class PatientController extends Controller
             'password' => 'required|min:8',
             'address' => 'required',
             'dob' => 'required',
+            'profile_photo'
         ]);
+
+        if ($request->hasFile('profile_photo')) {
+            $photo = $request->file('profile_photo');
+            $photo2 = uniqid() . '.' . $photo->extension();
+            $photo->storeAs('public/images/profile_pics', $photo2);
+        }
 
         //posting user data
         $userData = new User;
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
+        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $photo2);
         $userData->phone_number = $request->phone_number;
         $userData->email = $request->email;
         $userData->password = Hash::make($request->password);
@@ -90,6 +99,7 @@ class PatientController extends Controller
             'email' => 'required|email',
             'address' => 'required',
             'dob' => 'required',
+            'profile_photo'
         ]);
 
         //searching for user data in database
