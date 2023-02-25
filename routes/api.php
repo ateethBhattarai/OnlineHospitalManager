@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PharmacistController;
 use App\Http\Controllers\PharmacyController;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,18 +21,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
 
-Route::resource('/user', UserController::class);
-
-Route::resource('/patient', PatientController::class);
+Route::post('/patient/login', [PatientController::class, 'login']);
 Route::get('/patient/trashed', [PatientController::class, 'trashedData']);
+Route::resource('/patient', PatientController::class);
 
 Route::resource('/doctor', DoctorController::class);
 Route::resource('/pharmacy', PharmacyController::class);
 Route::resource('/pharmacist', PharmacistController::class);
 Route::resource('/appointment', AppointmentController::class);
+
+Route::post('/admin/login', [AdminController::class, 'login']);
 Route::resource('/admin', AdminController::class);
 // Route::post('/prove', [DoctorController::class, 'prove']);
+
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/login', [AuthController::class, 'login']);

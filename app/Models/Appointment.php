@@ -21,11 +21,11 @@ class Appointment extends Model
 
     public function getPatientData()
     {
-        return $this->hasOne(Patient::class);
+        return $this->hasOne(Appointment::class, 'patient_id');
     }
 
     public function getDoctorData()
     {
-        return $this->hasMany(Doctor::class, 'doctor_id');
+        return $this->hasMany(Appointment::class, 'doctor_id');
     }
 }

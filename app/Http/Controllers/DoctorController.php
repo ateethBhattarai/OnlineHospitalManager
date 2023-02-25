@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class DoctorController extends Controller
 {
@@ -20,7 +21,7 @@ class DoctorController extends Controller
         //validation for storing doctor's data
         $request->validate([
             'full_name' => 'required|max:100',
-            'phone_number' => 'required',
+            'phone_number' => 'required|regex:/9[6-8]{1}[0-9]{8}/',
             'email' => 'required|email',
             'role' => 'required|in:admin,patient,doctor,pharmacist',
             'password' => 'required|min:8',
@@ -31,6 +32,13 @@ class DoctorController extends Controller
             'availability_time' => 'required',
             'fees' => 'required|integer',
         ]);
+
+        //managing profile photo
+        if ($request->hasFile('profile_photo')) {
+            $profile_photo = $request->file('profile_photo');
+            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+        }
 
         //posting user data
         $userData = new User;
@@ -80,7 +88,7 @@ class DoctorController extends Controller
         //validation for updating doctor's data
         $request->validate([
             'full_name' => 'required|max:100',
-            'phone_number' => 'required',
+            'phone_number' => 'required|regex:/9[6-8]{1}[0-9]{8}/',
             'email' => 'required|email',
             'role' => 'required|in:admin,patient,doctor,pharmacist',
             'address' => 'required',
@@ -89,12 +97,20 @@ class DoctorController extends Controller
             'qualification' => 'required',
             'availability_time' => 'required',
             'fees' => 'required|integer',
+            'profile_photo'
         ]);
+
+        //managing profile photo
+        if ($request->hasFile('profile_photo')) {
+            $profile_photo = $request->file('profile_photo');
+            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+        }
 
         //searching for user data in database
         $userData = User::find($id);
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
+        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;

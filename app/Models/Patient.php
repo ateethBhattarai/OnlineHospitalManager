@@ -17,4 +17,9 @@ class Patient extends Model
     protected $casts = [
         'blood_group' => \App\Enum\BloodGroup::class
     ];
+
+    public function getPatientAppointmentDetails()
+    {
+        return $this->hasOne(Appointment::class, 'patient_id');
+    }
 }

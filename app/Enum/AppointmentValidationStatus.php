@@ -4,9 +4,9 @@ namespace App\Enum;
 
 enum AppointmentValidationStatus: string
 {
-    case Approved = 'approved';
-    case Pending = 'pending';
-    case Declined = 'declined';
+    case APPROVED = 'approved';
+    case PENDING = 'pending';
+    case DECLINED = 'declined';
     case CANCEL = 'cancel';
     case COMPLETED = 'completed';
 }

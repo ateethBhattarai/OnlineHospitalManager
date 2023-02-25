@@ -12,7 +12,8 @@ class PatientController extends Controller
 {
     public function index()
     {
-        return User::with('getPatient')->where('role', 'patient')->latest()->get();
+        $data = User::with('getPatient')->where('role', 'patient')->get();
+        return response()->json($data, 200);
     }
 
     //stores data into the database
@@ -23,7 +24,7 @@ class PatientController extends Controller
         $request->validate([
             'blood_group' => 'required',
             'full_name' => 'required|max:100',
-            'phone_number' => 'required',
+            'phone_number' => 'required|regex:/9[6-8]{1}[0-9]{8}/',
             'role' => 'in:admin,patient,doctor,pharmacist',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
@@ -32,16 +33,17 @@ class PatientController extends Controller
             'profile_photo'
         ]);
 
-        if ($request->hasFile('profile_photo')) {
-            $photo = $request->file('profile_photo');
-            $photo2 = uniqid() . '.' . $photo->extension();
-            $photo->storeAs('public/images/profile_pics', $photo2);
-        }
 
         //posting user data
         $userData = new User;
+        //managing profile photo
+        if ($request->hasFile('profile_photo')) {
+            $profile_photo = $request->file('profile_photo');
+            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+            $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        }
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $photo2);
         $userData->phone_number = $request->phone_number;
         $userData->email = $request->email;
         $userData->password = Hash::make($request->password);
@@ -94,7 +96,7 @@ class PatientController extends Controller
         $request->validate([
             'blood_group' => 'required',
             'full_name' => 'required|max:100',
-            'phone_number' => 'required',
+            'phone_number' => 'required|regex:/9[6-8]{1}[0-9]{8}/',
             'role' => 'in:admin,patient,doctor,pharmacist',
             'email' => 'required|email',
             'address' => 'required',
@@ -105,7 +107,13 @@ class PatientController extends Controller
         //searching for user data in database
         $userData = User::find($id);
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
+        //managing profile photo
+        if ($request->hasFile('profile_photo')) {
+            $profile_photo = $request->file('profile_photo');
+            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+            $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        }
         $userData->phone_number = $request->phone_number;
         $userData->email = $request->email;
         $userData->address = $request->address;
@@ -140,5 +148,14 @@ class PatientController extends Controller
     {
         User::onlyTrashed()->get();
         return 'done';
+    }
+
+    public function login(Request $request)
+    {
+        $user = User::with('getPatient')->where('email', $request->email)->where('role', 'patient')->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return ["error" => "The credential does not matched!!"];
+        }
+        return $user;
     }
 }

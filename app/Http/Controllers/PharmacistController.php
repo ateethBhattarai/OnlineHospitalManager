@@ -7,6 +7,7 @@ use App\Models\Pharmacy;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class PharmacistController extends Controller
 {
@@ -21,19 +22,28 @@ class PharmacistController extends Controller
         //validation for storing pharmacist's data
         $request->validate([
             'full_name' => 'required|max:100',
-            'phone_number' => 'required',
+            'phone_number' => 'required|regex:/9[6-8]{1}[0-9]{8}/',
             'role' => 'required|in:admin,patient,doctor,pharmacist',
             'email' => 'required|email',
             'password' => 'required|min:8',
             'address' => 'required',
             'dob' => 'required',
             'qualification' => 'required',
+            'profile_photo'
         ]);
+
+        //managing profile photo
+        if ($request->hasFile('profile_photo')) {
+            $profile_photo = $request->file('profile_photo');
+            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+        }
+
 
         //posting user data
         $userData = new User;
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
+        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;
@@ -74,7 +84,7 @@ class PharmacistController extends Controller
         //validation for updating pharmacist's data
         $request->validate([
             'full_name' => 'required|max:100',
-            'phone_number' => 'required',
+            'phone_number' => 'required|regex:/9[6-8]{1}[0-9]{8}/',
             'role' => 'required|in:admin,patient,doctor,pharmacist',
             'email' => 'required|email',
             'address' => 'required',
@@ -82,10 +92,17 @@ class PharmacistController extends Controller
             'qualification' => 'required',
         ]);
 
+        //managing profile photo
+        if ($request->hasFile('profile_photo')) {
+            $profile_photo = $request->file('profile_photo');
+            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+        }
+
         //searching for user data in database
         $userData = User::find($id);
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
+        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;

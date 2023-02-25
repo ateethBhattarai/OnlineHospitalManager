@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Doctor;
+use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
     public function index()
     {
-        return Appointment::all();
+        $patient = Appointment::with('getPatientData')->latest()->get();
+        $doctor = Appointment::with('getDoctorData')->latest()->get();
+        return compact('doctor', 'patient');
     }
 
     //stores data into the database
@@ -29,9 +34,12 @@ class AppointmentController extends Controller
     }
 
     //search the data as per the full_name
-    public function show($name)
+    public function show($id)
     {
-        return Appointment::where("full_name", "like", "%" . $name . "%")->get();
+        // return Appointment::where("full_name", "like", "%" . $name . "%")->get();
+        $doctor = Doctor::with('getAppointmentDetails')->whereId($id)->latest()->get();
+        $patient = Patient::with('getPatientAppointmentDetails')->whereId($id)->latest()->get();
+        return compact('doctor', 'patient');
     }
 
 
@@ -44,9 +52,10 @@ class AppointmentController extends Controller
         ]);
 
         $data = Appointment::find($id);
-        $data->visit_date_and_time = $request->visit_date_and_time;
-        $data->patient_id = $request->patient_id;
-        $data->doctor_id = $request->doctor_id;
+        $data->visit_date_and_time = $data->visit_date_and_time;
+        $data->patient_id = $data->patient_id;
+        $data->doctor_id = $data->doctor_id;
+        $data->validation_status = $request->validation_status;
         return $data->save();
     }
 
