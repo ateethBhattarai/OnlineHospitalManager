@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->date('visit_date_and_time');
+            $table->dateTime('visit_date_and_time');
             $table->string('symptoms');
             $table->string('validation_status')->default('pending');
             $table->foreignId('patient_id')->constrained('patients')->onUpdate('cascade')->onDelete('cascade');

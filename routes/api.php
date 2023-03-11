@@ -35,6 +35,14 @@ Route::resource('/patient', PatientController::class);
 Route::resource('/doctor', DoctorController::class);
 Route::resource('/pharmacy', PharmacyController::class);
 Route::resource('/pharmacist', PharmacistController::class);
+
+Route::get('/patient/pendingAppointment/{id}', [AppointmentController::class, 'patientRequest']);
+// for patient
+Route::get('/appointments/upcoming/{patientId}', [AppointmentController::class, 'getUpcomingAppointments']);
+Route::get('/appointments/previous/{patientId}', [AppointmentController::class, 'getPreviousAppointments']);
+// for doctor
+Route::get('/appointments/doctor/previous/{id}', [AppointmentController::class, 'getUpcomingPendingAppointments']);
+Route::get('/appointments/doctor/upcoming/{id}', [AppointmentController::class, 'getUpcomingApprovedAppointments']);
 Route::resource('/appointment', AppointmentController::class);
 
 Route::post('/admin/login', [AdminController::class, 'login']);

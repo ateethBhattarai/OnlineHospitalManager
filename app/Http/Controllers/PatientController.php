@@ -19,7 +19,6 @@ class PatientController extends Controller
     //stores data into the database
     public function store(Request $request)
     {
-        // return $request->profile_photo;
         //validation for storing patient's data
         $request->validate([
             'blood_group' => 'required',
@@ -32,6 +31,7 @@ class PatientController extends Controller
             'dob' => 'required',
             'profile_photo'
         ]);
+
 
 
         //posting user data
