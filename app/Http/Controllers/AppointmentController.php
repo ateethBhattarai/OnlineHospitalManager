@@ -37,6 +37,18 @@ class AppointmentController extends Controller
     }
 
     // for patient usage
+    public function getCancelledAppointments($patientId)
+    {
+        $today = date('Y-m-d H:i');
+        $appointments = Appointment::where('patient_id', $patientId)
+            ->where('validation_status', 'cancel')
+            // ->where('visit_date_and_time', '>=', $today)
+            ->orderBy('visit_date_and_time', 'asc')
+            ->get();
+        return response()->json($appointments);
+    }
+
+    // for patient usage
     public function getPreviousAppointments($patientId)
     {
         $today = date('Y-m-d H:i');
@@ -55,6 +67,18 @@ class AppointmentController extends Controller
         $appointments = Appointment::where('doctor_id', $id)
             ->where('validation_status', 'pending')
             ->where('visit_date_and_time', '>=', $today)
+            ->orderBy('visit_date_and_time', 'asc')
+            ->get();
+        return response()->json($appointments);
+    }
+
+    // for doctor usage
+    public function getRejectedAppointments($doctorId)
+    {
+        $today = date('Y-m-d H:i');
+        $appointments = Appointment::where('doctor_id', $doctorId)
+            ->where('validation_status', 'declined')
+            // ->where('visit_date_and_time', '>=', $today)
             ->orderBy('visit_date_and_time', 'asc')
             ->get();
         return response()->json($appointments);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PharmacistController;
@@ -40,9 +41,11 @@ Route::get('/patient/pendingAppointment/{id}', [AppointmentController::class, 'p
 // for patient
 Route::get('/appointments/upcoming/{patientId}', [AppointmentController::class, 'getUpcomingAppointments']);
 Route::get('/appointments/previous/{patientId}', [AppointmentController::class, 'getPreviousAppointments']);
+Route::get('/appointments/doctor/cancel/{id}', [AppointmentController::class, 'getCancelledAppointments']);
 // for doctor
 Route::get('/appointments/doctor/previous/{id}', [AppointmentController::class, 'getUpcomingPendingAppointments']);
 Route::get('/appointments/doctor/upcoming/{id}', [AppointmentController::class, 'getUpcomingApprovedAppointments']);
+Route::get('/appointments/doctor/declined/{id}', [AppointmentController::class, 'getRejectedAppointments']);
 Route::resource('/appointment', AppointmentController::class);
 
 Route::post('/admin/login', [AdminController::class, 'login']);
@@ -51,3 +54,5 @@ Route::resource('/admin', AdminController::class);
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/messages', [ChatController::class, 'message']);

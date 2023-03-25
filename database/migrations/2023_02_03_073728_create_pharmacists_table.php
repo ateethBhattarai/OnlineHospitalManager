@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('created_by');
             $table->string('modified_by');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('pharmacy_id')->constrained('pharmacies')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('pharmacy_id')->constrained('pharmacies')->onUpdate('cascade')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

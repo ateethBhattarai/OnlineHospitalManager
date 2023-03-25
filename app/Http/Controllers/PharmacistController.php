@@ -29,7 +29,7 @@ class PharmacistController extends Controller
             'address' => 'required',
             'dob' => 'required',
             'qualification' => 'required',
-            'profile_photo'
+            // 'profile_photo'
         ]);
 
         //managing profile photo
@@ -43,7 +43,8 @@ class PharmacistController extends Controller
         //posting user data
         $userData = new User;
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        // $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;

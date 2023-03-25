@@ -110,7 +110,7 @@ class DoctorController extends Controller
         //searching for user data in database
         $userData = User::find($id);
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        // $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;
