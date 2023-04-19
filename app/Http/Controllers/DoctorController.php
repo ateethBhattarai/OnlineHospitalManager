@@ -141,4 +141,13 @@ class DoctorController extends Controller
         $data->delete();
         return "data deleted!!";
     }
+
+    //search the data as per the full_name
+    public function search($name)
+    {
+        $data = User::with('getDoctor')->where('role', 'doctor')->where("full_name", "like", "%" . $name . "%")->get();
+        if ($data) {
+            return $data;
+        }
+    }
 }

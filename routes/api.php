@@ -11,17 +11,6 @@ use App\Http\Controllers\PharmacyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
@@ -33,6 +22,7 @@ Route::post('/patient/login', [PatientController::class, 'login']);
 Route::get('/patient/trashed', [PatientController::class, 'trashedData']);
 Route::resource('/patient', PatientController::class);
 
+Route::get('/doctor/{name}', [DoctorController::class, 'search']);
 Route::resource('/doctor', DoctorController::class);
 Route::resource('/pharmacy', PharmacyController::class);
 Route::resource('/pharmacist', PharmacistController::class);
