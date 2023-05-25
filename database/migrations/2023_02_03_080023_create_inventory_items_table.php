@@ -21,7 +21,8 @@ return new class extends Migration
             $table->date('expiry_date');
             $table->string('created_by');
             $table->string('modified_by');
-            $table->foreignId('pharmacy_id')->constrained('pharmacies')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('cost')->default(0);
+            $table->string('photo');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -13,7 +13,13 @@ class PharmacistController extends Controller
 {
     public function index()
     {
-        return User::with('getPharmacist')->where('role', 'pharmacist')->latest()->get();
+        $data = User::with('getPharmacist')->where('role', 'pharmacist')->get();
+        return response()->json($data, 200);
+    }
+
+    public function edit($id)
+    {
+        return User::with('getPharmacist')->where('role', 'pharmacist')->whereId($id)->get()->first();
     }
 
     //stores data into the database
@@ -59,11 +65,11 @@ class PharmacistController extends Controller
         $pharmacistData->created_by = $request->created_by;
         $pharmacistData->modified_by = $request->modified_by;
         $pharmacistData->user_id = $request->user_id;
-        $pharmacistData->pharmacy_id = $request->pharmacy_id;
+        // $pharmacistData->pharmacy_id = $request->pharmacy_id;
 
         //saving the data
         $userData->save();
-        $userData->getPatient()->save($pharmacistData);
+        $userData->getPharmacist()->save($pharmacistData);
 
         return "data saved successfully";
     }

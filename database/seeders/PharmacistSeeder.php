@@ -27,7 +27,7 @@ class PharmacistSeeder extends Seeder
             $seederPharmacistData->created_by = $faker->name;
             $seederPharmacistData->modified_by = $faker->name;
             $seederPharmacistData->user_id = $faker->numberBetween(1, 10);
-            $seederPharmacistData->pharmacy_id = $faker->numberBetween(1, 4);
+            // $seederPharmacistData->pharmacy_id = $faker->numberBetween(1, 4);
 
             //seeding user data
             $seederUserData->full_name = $faker->name;

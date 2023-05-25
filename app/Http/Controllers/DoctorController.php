@@ -101,17 +101,19 @@ class DoctorController extends Controller
             'profile_photo'
         ]);
 
+        $userData = User::find($id);
+
         //managing profile photo
         if ($request->hasFile('profile_photo')) {
             $profile_photo = $request->file('profile_photo');
             $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
-            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+            $profile_photo->storeAs('public/profile_pics', $profile_photo_unique);
+            $userData->profile_photo = env('APP_URL') . '/storage/profile_pics/' . $profile_photo_unique;
         }
 
         //searching for user data in database
-        $userData = User::find($id);
         $userData->full_name = $request->full_name;
-        // $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;
@@ -146,7 +148,11 @@ class DoctorController extends Controller
     //search the data as per the full_name
     public function search($name)
     {
-        $data = User::with('getDoctor')->where('role', 'doctor')->where("full_name", "like", "%" . $name . "%")->get();
+        if (is_numeric($name)) {
+            $data = User::with('getDoctor')->where('role', 'doctor')->whereId($name)->get()->first();
+        } else {
+            $data = User::with('getDoctor')->where('role', 'doctor')->where("full_name", "like", "%" . $name . "%")->get();
+        }
         if ($data) {
             return $data;
         }

@@ -111,9 +111,11 @@ class PatientController extends Controller
         if ($request->hasFile('profile_photo')) {
             $profile_photo = $request->file('profile_photo');
             $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
-            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
-            $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+            $profile_photo->storeAs('public/profile_pics', $profile_photo_unique);
+            $userData->profile_photo = env('APP_URL') . '/storage/profile_pics/' . $profile_photo_unique;
         }
+
+        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->email = $request->email;
         $userData->address = $request->address;
@@ -157,5 +159,16 @@ class PatientController extends Controller
             return ["error" => "The credential does not matched!!"];
         }
         return $user;
+    }
+
+    public function changePassword(Request $req, $id)
+    {
+        $userData = User::find($id);
+        if (Hash::check($req->confirm_password, $userData->password)) {
+            return 'Password cannot be similar to old!';
+        }
+        $userData->password = Hash::make($req->password);
+        $userData->save();
+        return 'Password changed!';
     }
 }

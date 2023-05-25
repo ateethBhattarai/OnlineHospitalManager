@@ -5,11 +5,15 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InventoryItemsController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PharmacistController;
 use App\Http\Controllers\PharmacyController;
+use App\Models\InventoryItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -18,14 +22,20 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
+Route::put('/patient/changePassword/{id}', [PatientController::class, 'changePassword']);
 Route::post('/patient/login', [PatientController::class, 'login']);
 Route::get('/patient/trashed', [PatientController::class, 'trashedData']);
 Route::resource('/patient', PatientController::class);
 
-// Route::get('/doctor/{name}', [DoctorController::class, 'search']);
+
+Route::get('/doctor/{name}', [DoctorController::class, 'search']);
+Route::get('/inventory/{name}', [InventoryController::class, 'search']);
+
 Route::resource('/doctor', DoctorController::class);
 Route::resource('/pharmacy', PharmacyController::class);
 Route::resource('/pharmacist', PharmacistController::class);
+Route::resource('/inventory', InventoryController::class);
+
 
 Route::get('/patient/pendingAppointment/{id}', [AppointmentController::class, 'patientRequest']);
 // for patient
