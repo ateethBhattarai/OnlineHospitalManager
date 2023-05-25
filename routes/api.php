@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CountController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryItemsController;
@@ -54,5 +55,20 @@ Route::resource('/admin', AdminController::class);
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+
+//to count the table data
+Route::group(['prefix' => 'count'], function () {
+    Route::get('/patients', [CountController::class, 'getTotalPatients']);
+    Route::get('/doctors', [CountController::class, 'getTotalDoctors']);
+    Route::get('/pharmacists', [CountController::class, 'getTotalPharmacists']);
+    Route::get('/users', [CountController::class, 'getTotalUsers']);
+    Route::get('/inventoryItems', [CountController::class, 'getTotalInventoryItems']);
+    Route::get('/appointments', [CountController::class, 'getTotalAppointments']);
+    Route::get('/appointments/{id}', [CountController::class, 'getTotalIndividualAppointments']);
+    Route::get('/chronicDiseases', [CountController::class, 'countChronicDiseases']);
+    Route::get('/appointmentWeek', [CountController::class, 'getAppointmentCountByWeek']);
+    Route::get('/patientWeek', [CountController::class, 'getPatientCountByWeeks']);
+    Route::get('/itemType', [CountController::class, 'countByItemType']);
+});
 
 Route::post('/messages', [ChatController::class, 'message']);
