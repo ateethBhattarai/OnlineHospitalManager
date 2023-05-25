@@ -12,7 +12,8 @@ class DoctorController extends Controller
 {
     public function index()
     {
-        return User::with('getDoctor')->where('role', 'doctor')->latest()->get();
+        $data = User::with('getDoctor')->where('role', 'doctor')->get();
+        return response()->json($data, 200);
     }
 
     //stores data into the database

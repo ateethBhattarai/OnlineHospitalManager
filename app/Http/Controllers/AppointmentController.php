@@ -41,7 +41,7 @@ class AppointmentController extends Controller
     {
         $today = date('Y-m-d H:i');
         $appointments = Appointment::where('patient_id', $patientId)
-            ->where('validation_status', 'cancel')
+            ->where('validation_status', 'declined')
             // ->where('visit_date_and_time', '>=', $today)
             ->orderBy('visit_date_and_time', 'asc')
             ->get();
@@ -53,7 +53,7 @@ class AppointmentController extends Controller
     {
         $today = date('Y-m-d H:i');
         $appointments = Appointment::where('patient_id', $patientId)
-            ->where('validation_status', 'approved')
+            ->whereIn('validation_status', ['approved', 'declined'])
             ->where('visit_date_and_time', '<=', $today)
             ->orderBy('visit_date_and_time', 'asc')
             ->get();
@@ -145,6 +145,7 @@ class AppointmentController extends Controller
         $data->patient_id = $data->patient_id;
         $data->doctor_id = $data->doctor_id;
         $data->validation_status = $request->validation_status;
+        $data->payment_status = $request->payment_status;
         $data->created_by = $request->created_by;
         $data->modified_by = $request->modified_by;
         $data->save();

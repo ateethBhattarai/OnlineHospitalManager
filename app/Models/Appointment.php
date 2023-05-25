@@ -14,7 +14,8 @@ class Appointment extends Model
     protected $fillable = ['visit_date_and_time', 'symptoms'];
 
     protected $casts = [
-        'validation_status' => \App\Enum\AppointmentValidationStatus::class
+        'validation_status' => \App\Enum\AppointmentValidationStatus::class,
+        'payment_status' => \App\Enum\PaymentStatus::class
     ];
 
     protected $primaryKey = "id";

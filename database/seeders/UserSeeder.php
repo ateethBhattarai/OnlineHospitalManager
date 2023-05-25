@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             $seederUserData->phone_number = $faker->phoneNumber;
             $seederUserData->address = $faker->address;
             $seederUserData->email = $faker->email;
-            $seederUserData->role = 'admin';
+            $seederUserData->role = 'patient';
             $seederUserData->created_by = $faker->name;
             $seederUserData->modified_by = $faker->name;
             $seederUserData->dob = $faker->dateTime($max = 'now');

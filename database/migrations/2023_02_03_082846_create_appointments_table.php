@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('visit_date_and_time');
             $table->string('symptoms');
             $table->string('validation_status')->default('pending');
+            $table->string('payment_status')->default('pending');
             $table->foreignId('patient_id')->constrained('patients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('doctor_id')->constrained('doctors')->onUpdate('cascade')->onDelete('cascade');
             $table->string('created_by');

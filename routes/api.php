@@ -22,7 +22,7 @@ Route::post('/patient/login', [PatientController::class, 'login']);
 Route::get('/patient/trashed', [PatientController::class, 'trashedData']);
 Route::resource('/patient', PatientController::class);
 
-Route::get('/doctor/{name}', [DoctorController::class, 'search']);
+// Route::get('/doctor/{name}', [DoctorController::class, 'search']);
 Route::resource('/doctor', DoctorController::class);
 Route::resource('/pharmacy', PharmacyController::class);
 Route::resource('/pharmacist', PharmacistController::class);
@@ -31,7 +31,7 @@ Route::get('/patient/pendingAppointment/{id}', [AppointmentController::class, 'p
 // for patient
 Route::get('/appointments/upcoming/{patientId}', [AppointmentController::class, 'getUpcomingAppointments']);
 Route::get('/appointments/previous/{patientId}', [AppointmentController::class, 'getPreviousAppointments']);
-Route::get('/appointments/doctor/cancel/{id}', [AppointmentController::class, 'getCancelledAppointments']);
+Route::get('/appointments/patient/cancel/{id}', [AppointmentController::class, 'getCancelledAppointments']);
 // for doctor
 Route::get('/appointments/doctor/previous/{id}', [AppointmentController::class, 'getUpcomingPendingAppointments']);
 Route::get('/appointments/doctor/upcoming/{id}', [AppointmentController::class, 'getUpcomingApprovedAppointments']);

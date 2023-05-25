@@ -18,27 +18,25 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        for ($i = 0; $i < 3; $i++) {
 
-            //seeding user data
-            $seederUserData = new User;
-            $seederUserData->full_name = $faker->name;
-            $seederUserData->phone_number = $faker->phoneNumber;
-            $seederUserData->address = $faker->address;
-            $seederUserData->email = $faker->email;
-            $seederUserData->role = 'admin';
-            $seederUserData->created_by = $faker->name;
-            $seederUserData->modified_by = $faker->name;
-            $seederUserData->dob = $faker->dateTime($max = 'now');
-            $seederUserData->password = $faker->password;
-            $seederUserData->save();
+        //seeding user data
+        $seederUserData = new User;
+        $seederUserData->full_name = 'Admin admin';
+        $seederUserData->phone_number = $faker->phoneNumber;
+        $seederUserData->address = $faker->address;
+        $seederUserData->email = 'admin@admin.com';
+        $seederUserData->role = 'admin';
+        $seederUserData->created_by = 'System';
+        $seederUserData->modified_by = 'System';
+        $seederUserData->dob = $faker->dateTime($max = 'now');
+        $seederUserData->password = 'admin';
+        $seederUserData->save();
 
-            //seeding doctor data
-            $seederAdminData = new Admin;
-            $seederAdminData->user_id = $faker->numberBetween(1, 10);
-            $seederAdminData->created_by = $faker->name;
-            $seederAdminData->modified_by = $faker->name;
-            $seederUserData->getPatient()->save($seederAdminData);
-        }
+        //seeding admin data
+        $seederAdminData = new Admin;
+        $seederAdminData->user_id = $faker->numberBetween(1, 10);
+        $seederAdminData->created_by = 'System';
+        $seederAdminData->modified_by = 'System';
+        $seederUserData->getPatient()->save($seederAdminData);
     }
 }
