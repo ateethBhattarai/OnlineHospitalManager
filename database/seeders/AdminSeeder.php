@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
@@ -29,7 +30,7 @@ class AdminSeeder extends Seeder
         $seederUserData->created_by = 'System';
         $seederUserData->modified_by = 'System';
         $seederUserData->dob = $faker->dateTime($max = 'now');
-        $seederUserData->password = 'admin';
+        $seederUserData->password = Hash::make(12345678);
         $seederUserData->save();
 
         //seeding admin data

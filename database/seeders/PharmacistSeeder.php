@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Hash;
 
 class PharmacistSeeder extends Seeder
 {
@@ -18,27 +19,26 @@ class PharmacistSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
+
         for ($i = 0; $i < 10; $i++) {
             $seederPharmacistData = new Pharmacist;
             $seederUserData = new User;
 
-            //seeding pharmacist data
-            $seederPharmacistData->qualification = "OMBS";
-            $seederPharmacistData->created_by = $faker->name;
-            $seederPharmacistData->modified_by = $faker->name;
-            $seederPharmacistData->user_id = $faker->numberBetween(1, 10);
-            // $seederPharmacistData->pharmacy_id = $faker->numberBetween(1, 4);
+            // Seeding pharmacist data
+            $seederPharmacistData->qualification = $faker->randomElement(['Pharm. D.', 'MPharm.']);
+            $seederPharmacistData->created_by = 'System';
+            $seederPharmacistData->modified_by = 'System';
 
-            //seeding user data
+            // Seeding user data
             $seederUserData->full_name = $faker->name;
-            $seederUserData->phone_number = $faker->phoneNumber;
+            $seederUserData->phone_number = '98' . $faker->numberBetween(100000000, 999999999);
             $seederUserData->address = $faker->address;
             $seederUserData->email = $faker->email;
             $seederUserData->role = 'pharmacist';
-            $seederUserData->created_by = $faker->name;
-            $seederUserData->modified_by = $faker->name;
+            $seederUserData->created_by = 'System';
+            $seederUserData->modified_by = 'System';
             $seederUserData->dob = $faker->dateTime($max = 'now');
-            $seederUserData->password = $faker->password;
+            $seederUserData->password = Hash::make(12345678);
 
             $seederUserData->save();
             $seederUserData->getPharmacist()->save($seederPharmacistData);

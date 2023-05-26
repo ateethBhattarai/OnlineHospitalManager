@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('created_by');
             $table->string('modified_by');
             $table->integer('cost')->default(0);
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

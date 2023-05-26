@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('speciality');
             $table->string('qualification');
-            $table->date('availability_time');
             $table->integer('fees');
             $table->string('created_by');
             $table->string('modified_by');

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\InventoryItems;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,7 +29,8 @@ class DatabaseSeeder extends Seeder
             DoctorSeeder::class,
             PharmacistSeeder::class,
             AdminSeeder::class,
-            AppointmentSeeder::class
+            AppointmentSeeder::class,
+            InventoryItemSeeder::class
         ]);
     }
 }

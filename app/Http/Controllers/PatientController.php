@@ -101,7 +101,7 @@ class PatientController extends Controller
             'email' => 'required|email',
             'address' => 'required',
             'dob' => 'required',
-            'profile_photo'
+            // 'profile_photo'
         ]);
 
         //searching for user data in database
@@ -115,7 +115,7 @@ class PatientController extends Controller
             $userData->profile_photo = env('APP_URL') . '/storage/profile_pics/' . $profile_photo_unique;
         }
 
-        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        // $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->email = $request->email;
         $userData->address = $request->address;

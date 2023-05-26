@@ -35,22 +35,22 @@ class PharmacistController extends Controller
             'address' => 'required',
             'dob' => 'required',
             'qualification' => 'required',
-            // 'profile_photo'
+            'profile_photo'
         ]);
+
+
+        $userData = new User;
 
         //managing profile photo
         if ($request->hasFile('profile_photo')) {
             $profile_photo = $request->file('profile_photo');
             $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
-            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+            $profile_photo->storeAs('public/profile_pics', $profile_photo_unique);
+            $userData->profile_photo = env('APP_URL') . '/storage/profile_pics/' . $profile_photo_unique;
         }
 
-
         //posting user data
-        $userData = new User;
         $userData->full_name = $request->full_name;
-        // $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;
@@ -65,7 +65,6 @@ class PharmacistController extends Controller
         $pharmacistData->created_by = $request->created_by;
         $pharmacistData->modified_by = $request->modified_by;
         $pharmacistData->user_id = $request->user_id;
-        // $pharmacistData->pharmacy_id = $request->pharmacy_id;
 
         //saving the data
         $userData->save();
@@ -99,17 +98,18 @@ class PharmacistController extends Controller
             'qualification' => 'required',
         ]);
 
+
+        $userData = User::find($id);
         //managing profile photo
-        if ($request->hasFile('profile_photo')) {
-            $profile_photo = $request->file('profile_photo');
-            $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
-            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
-        }
+        // if ($request->hasFile('profile_photo')) {
+        //     $profile_photo = $request->file('profile_photo');
+        //     $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
+        //     $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+        // }
 
         //searching for user data in database
-        $userData = User::find($id);
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
+        // $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;
@@ -118,10 +118,9 @@ class PharmacistController extends Controller
         $userData->created_by = $request->created_by;
         $userData->modified_by = $request->modified_by;
 
-        $pharmacistData = Pharmacist::find($id);
+        $pharmacistData = User::find($id)->getPharmacist;
         $pharmacistData->qualification = $request->qualification;
         $pharmacistData->user_id = $request->user_id;
-        $pharmacistData->pharmacy_id = $request->pharmacy_id;
 
         //storing the updated data in database
         $userData->save();

@@ -30,21 +30,23 @@ class DoctorController extends Controller
             'dob' => 'required',
             'speciality' => 'required',
             'qualification' => 'required',
-            'availability_time' => 'required',
             'fees' => 'required|integer',
         ]);
+
+
+        $userData = new User;
 
         //managing profile photo
         if ($request->hasFile('profile_photo')) {
             $profile_photo = $request->file('profile_photo');
             $profile_photo_unique = uniqid() . '.' . $profile_photo->extension();
-            $profile_photo->storeAs('public/images/profile_pics', $profile_photo_unique);
+            $profile_photo->storeAs('public/profile_pics', $profile_photo_unique);
+            $userData->profile_photo = env('APP_URL') . '/storage/profile_pics/' . $profile_photo_unique;
         }
 
+
         //posting user data
-        $userData = new User;
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = $request->file('photo')?->store('profile_photos');
         $userData->phone_number = $request->phone_number;
         $userData->email = $request->email;
         $userData->password = Hash::make($request->password);
@@ -58,7 +60,6 @@ class DoctorController extends Controller
         $doctorData = new Doctor;
         $doctorData->speciality = $request->speciality;
         $doctorData->qualification = $request->qualification;
-        $doctorData->availability_time = $request->availability_time;
         $doctorData->fees = $request->fees;
         $doctorData->created_by = $request->created_by;
         $doctorData->modified_by = $request->modified_by;
@@ -96,7 +97,6 @@ class DoctorController extends Controller
             'dob' => 'required',
             'speciality' => 'required',
             'qualification' => 'required',
-            'availability_time' => 'required',
             'fees' => 'required|integer',
             'profile_photo'
         ]);
@@ -113,7 +113,6 @@ class DoctorController extends Controller
 
         //searching for user data in database
         $userData->full_name = $request->full_name;
-        $userData->profile_photo = env('APP_URL') . Storage::url('public/images/profile_pics/' . $profile_photo_unique);
         $userData->phone_number = $request->phone_number;
         $userData->role = $request->role;
         $userData->email = $request->email;
@@ -127,7 +126,6 @@ class DoctorController extends Controller
         $doctorData = User::find($id)->getDoctor;
         $doctorData->speciality = $request->speciality;
         $doctorData->qualification = $request->qualification;
-        $doctorData->availability_time = $request->availability_time;
         $doctorData->fees = $request->fees;
         $doctorData->user_id = $request->user_id;
 

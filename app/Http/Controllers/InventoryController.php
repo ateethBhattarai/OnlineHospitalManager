@@ -59,9 +59,11 @@ class InventoryController extends Controller
         $inventory->manufactured_date = $request->manufactured_date;
         $inventory->expiry_date = $request->expiry_date;
         $inventory->created_by = $request->created_by;
+        $inventory->cost = $request->cost;
         $inventory->modified_by = $request->modified_by;
 
-        $inventory->photo = env('APP_URL') . Storage::url('public/images/item_pics/' . $photo_unique);
+        // $inventory->photo = env('APP_URL') . Storage::url('public/images/item_pics/' . $photo_unique);
+
 
         $inventory->save();
 
